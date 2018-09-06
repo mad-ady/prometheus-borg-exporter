@@ -69,4 +69,4 @@ echo "borg_total_size{host=\"${HOSTNAME}\"} $TOTAL_SIZE" >> $TMP_FILE
 echo "borg_total_size_compressed{host=\"${HOSTNAME}\"} $TOTAL_SIZE_COMPRESSED" >> $TMP_FILE
 echo "borg_total_size_dedup{host=\"${HOSTNAME}\"} $TOTAL_SIZE_DEDUP" >> $TMP_FILE
 
-mv $TMP_FILE $PROM_FILE
+mv -f $TMP_FILE $PROM_FILE
