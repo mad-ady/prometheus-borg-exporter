@@ -11,6 +11,8 @@ Export borg information to prometheus.
 
 ## Install
 
+You must install this node exporter in each host that you want to monitor.
+
 ### With the Makfile
 
 For convenience, you can install this exporter with the command line
@@ -32,7 +34,7 @@ Alternative: Use `ExecStartPost` in your borg backupt timer itself to write our 
 
 ## Configure your node exporter
 
-Make sure your node exporter uses `textfile` in `--collectors.enabled` and add the following parameter: `--collector.textfile.directory=/var/lib/node_exporter/textfile_collector`
+You must start the node exporter service with the following parameter: `--collector.textfile.directory=/var/lib/node_exporter/textfile_collector`
 
 ## Exported metrics
 
