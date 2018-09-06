@@ -55,4 +55,4 @@ borg_total_size_dedup
 
 ### Grafana dashboard
 
-See [here](https://grafana.net/dashboards/1573) for a sample grafana dashboard.
+See [here](https://grafana.com/dashboards/7856) for a sample grafana dashboard.
