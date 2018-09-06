@@ -40,17 +40,17 @@ You must start the node exporter service with the following parameter: `--collec
 
 ```
 borg_extract_exit_code
-bork_hours_from_last_backup
-bork_count
-bork_files
-bork_chunks_unique
-bork_chunks_total
-bork_last_size
-bork_last_size_compressed
-bork_last_size_dedup
-bork_total_size
-bork_total_size_compressed
-bork_total_size_dedup
+borg_hours_from_last_backup
+borg_archives_count
+borg_files_count
+borg_chunks_unique
+borg_chunks_total
+borg_last_size
+borg_last_size_compressed
+borg_last_size_dedup
+borg_total_size
+borg_total_size_compressed
+borg_total_size_dedup
 ```
 
 ### Grafana dashboard

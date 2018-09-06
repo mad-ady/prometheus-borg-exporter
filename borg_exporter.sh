@@ -27,11 +27,11 @@ BORG_EXTRACT_EXIT_CODE=$(BORG_PASSPHRASE="$BORG_PASSPHRASE" borg extract --dry-r
 BORG_INFO=$(BORG_PASSPHRASE="$BORG_PASSPHRASE" borg info "$REPOSITORY::$LAST_ARCHIVE_NAME")
 
 echo "borg_extract_exit_code{host=\"${HOSTNAME}\"} $BORG_EXTRACT_EXIT_CODE" >> $TMP_FILE
-echo "bork_hours_from_last_backup{host=\"${HOSTNAME}\"} $NB_HOUR_FROM_LAST_BCK" >> $TMP_FILE
-echo "bork_count{host=\"${HOSTNAME}\"} $COUNTER" >> $TMP_FILE
-echo "bork_files{host=\"${HOSTNAME}\"} $(echo "$BORG_INFO" | grep "Number of files" | awk '{print $4}')" >> $TMP_FILE
-echo "bork_chunks_unique{host=\"${HOSTNAME}\"} $(echo "$BORG_INFO" | grep "Chunk index" | awk '{print $3}')" >> $TMP_FILE
-echo "bork_chunks_total{host=\"${HOSTNAME}\"} $(echo "$BORG_INFO" | grep "Chunk index" | awk '{print $4}')" >> $TMP_FILE
+echo "borg_hours_from_last_backup{host=\"${HOSTNAME}\"} $NB_HOUR_FROM_LAST_BCK" >> $TMP_FILE
+echo "borg_archives_count{host=\"${HOSTNAME}\"} $COUNTER" >> $TMP_FILE
+echo "borg_files_count{host=\"${HOSTNAME}\"} $(echo "$BORG_INFO" | grep "Number of files" | awk '{print $4}')" >> $TMP_FILE
+echo "borg_chunks_unique{host=\"${HOSTNAME}\"} $(echo "$BORG_INFO" | grep "Chunk index" | awk '{print $3}')" >> $TMP_FILE
+echo "borg_chunks_total{host=\"${HOSTNAME}\"} $(echo "$BORG_INFO" | grep "Chunk index" | awk '{print $4}')" >> $TMP_FILE
 
 function calc_bytes {
     NUM=$1
@@ -62,11 +62,11 @@ TOTAL_SIZE_COMPRESSED=$(calc_bytes $(echo "$BORG_INFO" |grep "All archives" |awk
 TOTAL_SIZE_DEDUP=$(calc_bytes $(echo "$BORG_INFO" |grep "All archives" |awk '{print $7}') $(echo "$BORG_INFO" |grep "All archives" |awk '{print $8}'))
 
 
-echo "bork_last_size{host=\"${HOSTNAME}\"} $LAST_SIZE" >> $TMP_FILE
-echo "bork_last_size_compressed{host=\"${HOSTNAME}\"} $LAST_SIZE_COMPRESSED" >> $TMP_FILE
-echo "bork_last_size_dedup{host=\"${HOSTNAME}\"} $LAST_SIZE_DEDUP" >> $TMP_FILE
-echo "bork_total_size{host=\"${HOSTNAME}\"} $TOTAL_SIZE" >> $TMP_FILE
-echo "bork_total_size_compressed{host=\"${HOSTNAME}\"} $TOTAL_SIZE_COMPRESSED" >> $TMP_FILE
-echo "bork_total_size_dedup{host=\"${HOSTNAME}\"} $TOTAL_SIZE_DEDUP" >> $TMP_FILE
+echo "borg_last_size{host=\"${HOSTNAME}\"} $LAST_SIZE" >> $TMP_FILE
+echo "borg_last_size_compressed{host=\"${HOSTNAME}\"} $LAST_SIZE_COMPRESSED" >> $TMP_FILE
+echo "borg_last_size_dedup{host=\"${HOSTNAME}\"} $LAST_SIZE_DEDUP" >> $TMP_FILE
+echo "borg_total_size{host=\"${HOSTNAME}\"} $TOTAL_SIZE" >> $TMP_FILE
+echo "borg_total_size_compressed{host=\"${HOSTNAME}\"} $TOTAL_SIZE_COMPRESSED" >> $TMP_FILE
+echo "borg_total_size_dedup{host=\"${HOSTNAME}\"} $TOTAL_SIZE_DEDUP" >> $TMP_FILE
 
 mv $TMP_FILE $PROM_FILE
