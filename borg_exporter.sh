@@ -20,14 +20,16 @@ COUNTER=$(echo "$ARCHIVES" | wc -l)
 LAST_ARCHIVE=$(BORG_PASSPHRASE=$BORG_PASSPHRASE borg list $REPOSITORY | sort -nr | head -n 1)
 LAST_ARCHIVE_NAME=$(echo $LAST_ARCHIVE | awk '{print $1}')
 LAST_ARCHIVE_DATE=$(echo $LAST_ARCHIVE | awk '{print $3" "$4}')
+LAST_ARCHIVE_TIMESTAMP=$(date -d "$LAST_ARCHIVE_DATE" +"%s")
 CURRENT_DATE="$(date '+%Y-%m-%d %H:%M:%S')"
 NB_HOUR_FROM_LAST_BCK=$(dateutils.ddiff "$LAST_ARCHIVE_DATE" "$CURRENT_DATE" -f '%H')
 
 BORG_EXTRACT_EXIT_CODE=$(BORG_PASSPHRASE="$BORG_PASSPHRASE" borg extract --dry-run "$REPOSITORY::$LAST_ARCHIVE_NAME" > /dev/null 2>&1; echo $?)
 BORG_INFO=$(BORG_PASSPHRASE="$BORG_PASSPHRASE" borg info "$REPOSITORY::$LAST_ARCHIVE_NAME")
 
+echo "borg_last_archive_timestamp{host=\"${HOSTNAME}\"} $LAST_ARCHIVE_TIMESTAMP" >> $TMP_FILE
 echo "borg_extract_exit_code{host=\"${HOSTNAME}\"} $BORG_EXTRACT_EXIT_CODE" >> $TMP_FILE
-echo "borg_hours_from_last_backup{host=\"${HOSTNAME}\"} $NB_HOUR_FROM_LAST_BCK" >> $TMP_FILE
+echo "borg_hours_from_last_archive{host=\"${HOSTNAME}\"} $NB_HOUR_FROM_LAST_BCK" >> $TMP_FILE
 echo "borg_archives_count{host=\"${HOSTNAME}\"} $COUNTER" >> $TMP_FILE
 echo "borg_files_count{host=\"${HOSTNAME}\"} $(echo "$BORG_INFO" | grep "Number of files" | awk '{print $4}')" >> $TMP_FILE
 echo "borg_chunks_unique{host=\"${HOSTNAME}\"} $(echo "$BORG_INFO" | grep "Chunk index" | awk '{print $3}')" >> $TMP_FILE
