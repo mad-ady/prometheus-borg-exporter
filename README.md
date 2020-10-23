@@ -13,7 +13,7 @@ Export borg information to prometheus.
 
 You must install this node exporter in each host that you want to monitor.
 
-### With the Makfile
+### With the Makefile
 
 For convenience, you can install this exporter with the command line
 `make install` or follow the process described in the next paragraph.
