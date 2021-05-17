@@ -22,13 +22,13 @@ NB_HOUR_FROM_LAST_BCK=$(datediff "$LAST_ARCHIVE_DATE" "$CURRENT_DATE" -f '%H')
 # BORG_EXTRACT_EXIT_CODE=$(BORG_PASSPHRASE="$BORG_PASSPHRASE" borg extract --dry-run "$REPOSITORY::$LAST_ARCHIVE_NAME" > /dev/null 2>&1; echo $?)
 BORG_INFO=$(BORG_PASSPHRASE="$BORG_PASSPHRASE" borg info "$REPOSITORY::$LAST_ARCHIVE_NAME")
 
-echo "borg_last_archive_timestamp{host=\"${HOSTNAME}\",repository=\"${REPOSITORY}\"} $LAST_ARCHIVE_TIMESTAMP" >> $TMP_FILE
-# echo "borg_extract_exit_code{host=\"${HOSTNAME}\",repository=\"${REPOSITORY}\"} $BORG_EXTRACT_EXIT_CODE" >> $TMP_FILE
-echo "borg_hours_from_last_archive{host=\"${HOSTNAME}\",repository=\"${REPOSITORY}\"} $NB_HOUR_FROM_LAST_BCK" >> $TMP_FILE
-echo "borg_archives_count{host=\"${HOSTNAME}\",repository=\"${REPOSITORY}\"} $COUNTER" >> $TMP_FILE
-echo "borg_files_count{host=\"${HOSTNAME}\",repository=\"${REPOSITORY}\"} $(echo "$BORG_INFO" | grep "Number of files" | awk '{print $4}')" >> $TMP_FILE
-echo "borg_chunks_unique{host=\"${HOSTNAME}\",repository=\"${REPOSITORY}\"} $(echo "$BORG_INFO" | grep "Chunk index" | awk '{print $3}')" >> $TMP_FILE
-echo "borg_chunks_total{host=\"${HOSTNAME}\",repository=\"${REPOSITORY}\"} $(echo "$BORG_INFO" | grep "Chunk index" | awk '{print $4}')" >> $TMP_FILE
+echo "borg_last_archive_timestamp $LAST_ARCHIVE_TIMESTAMP" >> $TMP_FILE
+# echo "borg_extract_exit_code $BORG_EXTRACT_EXIT_CODE" >> $TMP_FILE
+echo "borg_hours_from_last_archive $NB_HOUR_FROM_LAST_BCK" >> $TMP_FILE
+echo "borg_archives_count $COUNTER" >> $TMP_FILE
+echo "borg_files_count $(echo "$BORG_INFO" | grep "Number of files" | awk '{print $4}')" >> $TMP_FILE
+echo "borg_chunks_unique $(echo "$BORG_INFO" | grep "Chunk index" | awk '{print $3}')" >> $TMP_FILE
+echo "borg_chunks_total $(echo "$BORG_INFO" | grep "Chunk index" | awk '{print $4}')" >> $TMP_FILE
 
 function calc_bytes {
     NUM=$1
@@ -62,11 +62,11 @@ TOTAL_SIZE_COMPRESSED=$(calc_bytes $(echo "$BORG_INFO" |grep "All archives" |awk
 TOTAL_SIZE_DEDUP=$(calc_bytes $(echo "$BORG_INFO" |grep "All archives" |awk '{print $7}') $(echo "$BORG_INFO" |grep "All archives" |awk '{print $8}'))
 
 
-echo "borg_last_size{host=\"${HOSTNAME}\",repository=\"${REPOSITORY}\"} $LAST_SIZE" >> $TMP_FILE
-echo "borg_last_size_compressed{host=\"${HOSTNAME}\",repository=\"${REPOSITORY}\"} $LAST_SIZE_COMPRESSED" >> $TMP_FILE
-echo "borg_last_size_dedup{host=\"${HOSTNAME}\",repository=\"${REPOSITORY}\"} $LAST_SIZE_DEDUP" >> $TMP_FILE
-echo "borg_total_size{host=\"${HOSTNAME}\",repository=\"${REPOSITORY}\"} $TOTAL_SIZE" >> $TMP_FILE
-echo "borg_total_size_compressed{host=\"${HOSTNAME}\",repository=\"${REPOSITORY}\"} $TOTAL_SIZE_COMPRESSED" >> $TMP_FILE
-echo "borg_total_size_dedup{host=\"${HOSTNAME}\",repository=\"${REPOSITORY}\"} $TOTAL_SIZE_DEDUP" >> $TMP_FILE
+echo "borg_last_size $LAST_SIZE" >> $TMP_FILE
+echo "borg_last_size_compressed $LAST_SIZE_COMPRESSED" >> $TMP_FILE
+echo "borg_last_size_dedup $LAST_SIZE_DEDUP" >> $TMP_FILE
+echo "borg_total_size $TOTAL_SIZE" >> $TMP_FILE
+echo "borg_total_size_compressed $TOTAL_SIZE_COMPRESSED" >> $TMP_FILE
+echo "borg_total_size_dedup $TOTAL_SIZE_DEDUP" >> $TMP_FILE
 
-cat $TMP_FILE | curl --data-binary @- ${PUSHGATEWAY_URL}/metrics/job/borg-exporter
+cat $TMP_FILE | curl --data-binary @- ${PUSHGATEWAY_URL}/metrics/job/borg-exporter/host/$HOSTNAME/repository/$REPOSITORY
