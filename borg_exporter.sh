@@ -47,6 +47,9 @@ function calc_bytes {
         TB)
             echo $NUM | awk '{ print $1 * 1024 * 1024 * 1024 * 1024 }'
             ;;
+        B)
+            echo $NUM | awk '{ print $1 }'
+            ;;
     esac
 }
 
