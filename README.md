@@ -11,13 +11,6 @@ Export borg information to prometheus.
 
 ## Install
 
-You must install this node exporter in each host that you want to monitor.
-
-### With the Makefile
-
-For convenience, you can install this exporter with the command line
-`make install` or follow the process described in the next paragraph.
-
 ### Manually
 Copy `borg_exporter.sh` to `/usr/local/bin`.
 
@@ -31,10 +24,6 @@ systemctl start prometheus-borg-exporter.timer
 ```
 
 Alternative: Use `ExecStartPost` in your borg backupt timer itself to write our the metrics.
-
-## Configure your node exporter
-
-You must start the node exporter service with the following parameter: `--collector.textfile.directory=/var/lib/node_exporter/textfile_collector`
 
 ## Exported metrics
 
