@@ -19,11 +19,11 @@ LAST_ARCHIVE_TIMESTAMP=$(date -d "$LAST_ARCHIVE_DATE" +"%s")
 CURRENT_DATE="$(date '+%Y-%m-%d %H:%M:%S')"
 NB_HOUR_FROM_LAST_BCK=$(datediff "$LAST_ARCHIVE_DATE" "$CURRENT_DATE" -f '%H')
 
-BORG_EXTRACT_EXIT_CODE=$(BORG_PASSPHRASE="$BORG_PASSPHRASE" borg extract --dry-run "$REPOSITORY::$LAST_ARCHIVE_NAME" > /dev/null 2>&1; echo $?)
+# BORG_EXTRACT_EXIT_CODE=$(BORG_PASSPHRASE="$BORG_PASSPHRASE" borg extract --dry-run "$REPOSITORY::$LAST_ARCHIVE_NAME" > /dev/null 2>&1; echo $?)
 BORG_INFO=$(BORG_PASSPHRASE="$BORG_PASSPHRASE" borg info "$REPOSITORY::$LAST_ARCHIVE_NAME")
 
 echo "borg_last_archive_timestamp{host=\"${HOSTNAME}\",repository=\"${REPOSITORY}\"} $LAST_ARCHIVE_TIMESTAMP" >> $TMP_FILE
-echo "borg_extract_exit_code{host=\"${HOSTNAME}\",repository=\"${REPOSITORY}\"} $BORG_EXTRACT_EXIT_CODE" >> $TMP_FILE
+# echo "borg_extract_exit_code{host=\"${HOSTNAME}\",repository=\"${REPOSITORY}\"} $BORG_EXTRACT_EXIT_CODE" >> $TMP_FILE
 echo "borg_hours_from_last_archive{host=\"${HOSTNAME}\",repository=\"${REPOSITORY}\"} $NB_HOUR_FROM_LAST_BCK" >> $TMP_FILE
 echo "borg_archives_count{host=\"${HOSTNAME}\",repository=\"${REPOSITORY}\"} $COUNTER" >> $TMP_FILE
 echo "borg_files_count{host=\"${HOSTNAME}\",repository=\"${REPOSITORY}\"} $(echo "$BORG_INFO" | grep "Number of files" | awk '{print $4}')" >> $TMP_FILE
