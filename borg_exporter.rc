@@ -1,3 +1,5 @@
 BORG_PASSPHRASE=""
 REPOSITORY=""
 PUSHGATEWAY_URL=http://pushgateway.clems4ever.com
+BASEREPODIR="/backup"
+NODE_EXPORTER_DIR="/path/to/node/exporter/textfile/collector/dir"
