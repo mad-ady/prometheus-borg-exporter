@@ -3,6 +3,11 @@
 source /etc/borg_exporter.rc
 
 TMP_FILE=$(mktemp /tmp/prometheus-borg-XXXXX)
+DATEDIFF=`which datediff`
+if [ -z "$DATEDIFF" ]; then
+    #ubuntu packages have a different executable name
+    DATEDIFF=`which dateutils.ddiff`
+fi
 
 [ -e $TMP_FILE ] && rm -f $TMP_FILE
 
@@ -57,7 +62,7 @@ function getBorgDataForRepository {
         LAST_ARCHIVE_DATE=$(echo $LAST_ARCHIVE | awk '{print $3" "$4}')
         LAST_ARCHIVE_TIMESTAMP=$(date -d "$LAST_ARCHIVE_DATE" +"%s")
         CURRENT_DATE="$(date '+%Y-%m-%d %H:%M:%S')"
-        NB_HOUR_FROM_LAST_BCK=$(datediff "$LAST_ARCHIVE_DATE" "$CURRENT_DATE" -f '%H')
+        NB_HOUR_FROM_LAST_BCK=$($DATEDIFF "$LAST_ARCHIVE_DATE" "$CURRENT_DATE" -f '%H')
 
         # in case the date parsing from BORG didn't work (e.g. archive with space in it), datediff will output
         # a usage message on stdout and will break prometheus formatting. We need to
