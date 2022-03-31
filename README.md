@@ -14,13 +14,17 @@ Export borg information to prometheus. Extended to export information about a li
 ### Manually
 Copy `borg_exporter.sh` to `/usr/local/bin`.
 
-Copy `borg_exporter.rc` to `/etc/` and replace your repokey and repository in it.
+Copy `borg_exporter.rc` to `/etc/` and configure it (see the configuration section below).
 
-Copy the systemd unit to `/etc/systemd/system` and run 
+Copy the systemd unit and timer to `/etc/systemd/system`:
+```
+sudo cp prometheus-borg-exporter.* /etc/systemd/system
+```
+and run 
 
 ```
-systemctl enable server3-borg-exporter.timer
-systemctl start server3-borg-exporter.timer
+sudo systemctl enable prometheus-borg-exporter.timer
+sudo systemctl start prometheus-borg-exporter.timer
 ```
 
 Alternative: Use `ExecStartPost` in your borg backup timer itself to write our the metrics.
