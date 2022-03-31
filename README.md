@@ -1,11 +1,10 @@
 # Borg exporter
 
-Export borg information to server3. Extended to export information about a list of borg repositories (discovered via `find`), and also to export details about today's backups.
+Export borg information to prometheus. Extended to export information about a list of borg repositories (discovered via `find`), and also to export details about today's backups.
 
 ## Dependencies
 
- * [Dateutils](http://www.fresse.org/dateutils/)
- * server3 (obviously)
+ * [Dateutils](http://www.fresse.org/dateutils/)  `sudo apt-get install dateutils`
  * Node Exporter with textfile collector
  * [Borg](https://github.com/borgbackup/borg)
  * binutils (sed, grep, wc, etc)
