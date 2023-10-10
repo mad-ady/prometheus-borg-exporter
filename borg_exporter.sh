@@ -1,6 +1,8 @@
 #!/bin/bash
 
-source /etc/borg_exporter.rc
+source /borg_exporter.rc
+
+#sleep 30
 
 TMP_FILE=$(mktemp /tmp/prometheus-borg-XXXXX)
 DATEDIFF=`which datediff`
@@ -125,6 +127,9 @@ function getBorgDataForRepository {
     fi
 }
 
+while true
+do
+
 #print the definition of the metrics
 echo "# HELP borg_hours_from_last_archive How many hours have passed since the last archive was added to the repo (counted by borg_exporter.sh)" >> $TMP_FILE
 echo "# TYPE borg_hours_from_last_archive gauge" >> $TMP_FILE
@@ -173,7 +178,7 @@ else
             getBorgDataForRepository $REPO $host
         done
     else
-        echo "Error: Either set REPOSITORY or BASEREPODIR in /etc/borg_exporter.rc"
+        echo "Error: Either set REPOSITORY or BASEREPODIR in /borg_exporter.rc"
     fi
     
 fi
@@ -193,3 +198,7 @@ else
 fi
 #cleanup
 rm -f $TMP_FILE
+
+sleep 60
+
+done
