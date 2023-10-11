@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+
+  borg-exporter:
+    build: builds/prometheus-borg-exporter/.
+    container_name: borg-exporter
+    volumes:
+      - ./node_exporter/textfile_collector/:/node_exporter/textfile_collector
+    restart: always
+    networks:
+      default:
+
