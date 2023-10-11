@@ -160,7 +160,11 @@ echo "# TYPE borg_last_size_dedup gauge" >> $TMP_FILE
 
 if [ -n "${REPOSITORY}" ] 
 then
-    getBorgDataForRepository "${REPOSITORY}" "${HOSTNAME}"
+    for i in $(echo $REPOSITORY | tr ";" "\n")
+    do
+        echo "Use Repository: $i"
+        getBorgDataForRepository "${i}" "${HOSTNAME}"
+    done
 else
     #discover (recursively) borg repositories starting from a path and extract info for each
     #(e.g. when running on the backup server directly)
@@ -199,6 +203,7 @@ fi
 #cleanup
 rm -f $TMP_FILE
 
-sleep 60
+# Wait 10 hours
+sleep 6000
 
 done
