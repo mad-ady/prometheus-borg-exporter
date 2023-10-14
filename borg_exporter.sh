@@ -1,5 +1,8 @@
 #!/bin/bash
 
+while true
+do
+
 source /borg_exporter.rc
 
 #sleep 30
@@ -127,9 +130,6 @@ function getBorgDataForRepository {
     fi
 }
 
-while true
-do
-
 #print the definition of the metrics
 echo "# HELP borg_hours_from_last_archive How many hours have passed since the last archive was added to the repo (counted by borg_exporter.sh)" >> $TMP_FILE
 echo "# TYPE borg_hours_from_last_archive gauge" >> $TMP_FILE
@@ -200,10 +200,12 @@ else
         echo "Please configure either PUSHGATEWAY_URL or NODE_EXPORTER_DIR in /etc/borg_exporter.rc"
     fi
 fi
+
 #cleanup
 rm -f $TMP_FILE
 
-# Wait 10 hours
+# Wait 10 minutes
+echo "sleep 100 minutes"
 sleep 6000
 
 done
