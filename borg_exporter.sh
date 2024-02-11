@@ -14,7 +14,7 @@ fi
 #prevent "Attempting to access a previously unknown unencrypted repository" prompt
 export BORG_RELOCATED_REPO_ACCESS_IS_OK=yes
 export BORG_UNKNOWN_UNENCRYPTED_REPO_ACCESS_IS_OK=yes
-HOSTNAME=$(hostname)
+HOSTNAME=${HOSTNAME:-$(hostname)}
 
 function calc_bytes {
     NUM=$1
