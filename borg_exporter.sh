@@ -165,6 +165,8 @@ then
         echo "Use Repository: $i"
         getBorgDataForRepository "${i}" "${HOSTNAME}"
     done
+    # Clear Cache (https://borgbackup.readthedocs.io/en/stable/faq.html#the-borg-cache-eats-way-too-much-disk-space-what-can-i-do)
+    #find /root/.cache/borg -type d -name 'chunks.archive.d' -exec rm -rv {}/ \; -exec sh -c 'cd {}/.. && touch chunks.archive.d' \;
 else
     #discover (recursively) borg repositories starting from a path and extract info for each
     #(e.g. when running on the backup server directly)
