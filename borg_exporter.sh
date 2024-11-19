@@ -1,6 +1,11 @@
 #!/bin/bash
 
-source /etc/borg_exporter.rc
+while true
+do
+
+source /borg_exporter.rc
+
+#sleep 30
 
 TMP_FILE=$(mktemp /tmp/prometheus-borg-XXXXX)
 DATEDIFF=`which datediff`
@@ -155,7 +160,13 @@ echo "# TYPE borg_last_size_dedup gauge" >> $TMP_FILE
 
 if [ -n "${REPOSITORY}" ] 
 then
-    getBorgDataForRepository "${REPOSITORY}" "${HOSTNAME}"
+    for i in $(echo $REPOSITORY | tr ";" "\n")
+    do
+        echo "Use Repository: $i"
+        getBorgDataForRepository "${i}" "${HOSTNAME}"
+    done
+    # Clear Cache (https://borgbackup.readthedocs.io/en/stable/faq.html#the-borg-cache-eats-way-too-much-disk-space-what-can-i-do)
+    #find /root/.cache/borg -type d -name 'chunks.archive.d' -exec rm -rv {}/ \; -exec sh -c 'cd {}/.. && touch chunks.archive.d' \;
 else
     #discover (recursively) borg repositories starting from a path and extract info for each
     #(e.g. when running on the backup server directly)
@@ -173,7 +184,7 @@ else
             getBorgDataForRepository $REPO $host
         done
     else
-        echo "Error: Either set REPOSITORY or BASEREPODIR in /etc/borg_exporter.rc"
+        echo "Error: Either set REPOSITORY or BASEREPODIR in /borg_exporter.rc"
     fi
     
 fi
@@ -191,5 +202,12 @@ else
         echo "Please configure either PUSHGATEWAY_URL or NODE_EXPORTER_DIR in /etc/borg_exporter.rc"
     fi
 fi
+
 #cleanup
 rm -f $TMP_FILE
+
+# Wait 10 minutes
+echo "sleep 100 minutes"
+sleep 6000
+
+done
